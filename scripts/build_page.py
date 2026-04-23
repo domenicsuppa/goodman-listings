@@ -128,6 +128,7 @@ HTML_TEMPLATE = r"""<!doctype html>
     margin-top: 14px;
   }
 
+  /* Search + filter bar */
   .controls {
     background: #fff;
     border-bottom: 1px solid var(--line);
@@ -160,8 +161,128 @@ HTML_TEMPLATE = r"""<!doctype html>
     white-space: nowrap;
   }
 
-  main.wrap { padding-top: 28px; padding-bottom: 64px; }
+  /* Buffer bar */
+  .buffer-bar-wrap {
+    background: #f4f2fe;
+    border-bottom: 1px solid #ddd8f8;
+    padding: 10px 0;
+    font-size: 13px;
+  }
+  .buf-connect {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .buf-logo {
+    font-weight: 800;
+    color: var(--ai);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .buf-connect input[type="password"] {
+    flex: 1 1 240px;
+    font: inherit;
+    font-size: 12px;
+    padding: 7px 10px;
+    border: 1px solid #cdc8f5;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
+  .buf-action-btn {
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 14px;
+    background: var(--ai);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+  }
+  .buf-action-btn:hover { opacity: 0.85; }
+  .buf-help {
+    font-size: 11px;
+    color: var(--ai);
+    text-decoration: none;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  .buf-help:hover { opacity: 1; text-decoration: underline; }
+  .buf-status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .buf-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--avail);
+    flex-shrink: 0;
+  }
+  .buf-status-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .buf-ghost-btn {
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    border: 1px solid #cdc8f5;
+    color: var(--ai);
+    background: transparent;
+  }
+  .buf-ghost-btn:hover { background: var(--ai-bg); }
+  .buf-disconnect-btn {
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    background: transparent;
+    margin-left: auto;
+  }
+  .buf-disconnect-btn:hover { color: #8a1f1f; border-color: #8a1f1f; }
+  .buf-mapping {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .buf-map-row { display: flex; flex-direction: column; gap: 4px; }
+  .buf-map-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .buf-map-sel {
+    font: inherit;
+    font-size: 12px;
+    padding: 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
 
+  /* Listing cards */
+  main.wrap { padding-top: 28px; padding-bottom: 64px; }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -182,17 +303,8 @@ HTML_TEMPLATE = r"""<!doctype html>
     box-shadow: 0 6px 20px rgba(15, 76, 129, 0.10);
     border-color: #cfd6e0;
   }
-  .headline {
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--ink);
-  }
-  .addr-row {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.4;
-  }
+  .headline { font-size: 15px; font-weight: 700; line-height: 1.35; color: var(--ink); }
+  .addr-row { color: var(--muted); font-size: 12px; line-height: 1.4; }
   .addr-row .addr { font-weight: 500; color: var(--ink); }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
@@ -207,16 +319,9 @@ HTML_TEMPLATE = r"""<!doctype html>
   }
   .chip.state { background: var(--accent); color: #fff; }
   .chip.avail { background: var(--avail-bg); color: var(--avail); }
-  .sf {
-    font-size: 13px;
-    color: var(--muted);
-  }
+  .sf { font-size: 13px; color: var(--muted); }
   .sf strong { color: var(--ink); font-weight: 600; }
-  .description {
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--muted);
-  }
+  .description { font-size: 13px; line-height: 1.55; color: var(--muted); }
   .angle {
     font-size: 12px;
     color: var(--ai);
@@ -227,11 +332,7 @@ HTML_TEMPLATE = r"""<!doctype html>
     font-style: italic;
     line-height: 1.45;
   }
-  details.tenants {
-    border-top: 1px solid var(--line);
-    padding-top: 10px;
-    margin-top: 4px;
-  }
+  details.tenants { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 4px; }
   details.tenants summary {
     cursor: pointer;
     font-size: 11px;
@@ -244,48 +345,17 @@ HTML_TEMPLATE = r"""<!doctype html>
     text-transform: uppercase;
   }
   details.tenants summary::-webkit-details-marker { display: none; }
-  details.tenants summary::before {
-    content: "▸  ";
-    display: inline-block;
-    width: 16px;
-  }
-  details.tenants[open] summary::before {
-    content: "▾  ";
-  }
-  details.tenants ul {
-    list-style: none;
-    padding: 6px 0 0 0;
-    margin: 0;
-  }
-  details.tenants li {
-    padding: 12px 0;
-    border-top: 1px dashed var(--line);
-  }
+  details.tenants summary::before { content: "▸  "; display: inline-block; width: 16px; }
+  details.tenants[open] summary::before { content: "▾  "; }
+  details.tenants ul { list-style: none; padding: 6px 0 0; margin: 0; }
+  details.tenants li { padding: 12px 0; border-top: 1px dashed var(--line); }
   details.tenants li:first-child { border-top: none; }
-  .tenant-cat {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .tenant-brands {
-    font-size: 11px;
-    color: var(--ai);
-    margin: 4px 0 6px;
-    letter-spacing: 0.02em;
-    font-weight: 500;
-  }
-  .tenant-why {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
+  .tenant-cat { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .tenant-brands { font-size: 11px; color: var(--ai); margin: 4px 0 6px; letter-spacing: 0.02em; font-weight: 500; }
+  .tenant-why { font-size: 12px; color: var(--muted); line-height: 1.5; }
 
-  /* Marketing content section */
-  details.marketing {
-    border-top: 1px solid var(--line);
-    padding-top: 10px;
-    margin-top: 2px;
-  }
+  /* Marketing content */
+  details.marketing { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 2px; }
   details.marketing > summary {
     cursor: pointer;
     font-size: 11px;
@@ -298,18 +368,9 @@ HTML_TEMPLATE = r"""<!doctype html>
     text-transform: uppercase;
   }
   details.marketing > summary::-webkit-details-marker { display: none; }
-  details.marketing > summary::before {
-    content: "▸  ";
-    display: inline-block;
-    width: 16px;
-  }
+  details.marketing > summary::before { content: "▸  "; display: inline-block; width: 16px; }
   details.marketing[open] > summary::before { content: "▾  "; }
-  .channel-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin: 10px 0 8px;
-  }
+  .channel-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0 8px; }
   .channel-tab {
     font-size: 10px;
     font-weight: 700;
@@ -324,11 +385,7 @@ HTML_TEMPLATE = r"""<!doctype html>
     font-family: inherit;
   }
   .channel-tab:hover { border-color: var(--ai); color: var(--ai); }
-  .channel-tab.active {
-    background: var(--ai);
-    color: #fff;
-    border-color: var(--ai);
-  }
+  .channel-tab.active { background: var(--ai); color: #fff; border-color: var(--ai); }
   .channel-panel { display: none; }
   .channel-panel.active { display: block; }
   .local-context {
@@ -354,42 +411,15 @@ HTML_TEMPLATE = r"""<!doctype html>
     max-height: 260px;
     overflow-y: auto;
   }
-  .ad-field {
-    font-size: 12px;
-    line-height: 1.5;
-    padding: 6px 10px;
-    border-left: 2px solid var(--line);
-    margin: 6px 0;
-  }
-  .ad-field .label {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: block;
-    margin-bottom: 2px;
-  }
+  .ad-field { font-size: 12px; line-height: 1.5; padding: 6px 10px; border-left: 2px solid var(--line); margin: 6px 0; }
+  .ad-field .label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px; }
   .ad-field .value { color: var(--ink); }
-  .ad-field .len {
-    color: var(--muted);
-    font-size: 10px;
-    margin-left: 6px;
-  }
-  .hooks {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .hooks li {
-    font-size: 12px;
-    line-height: 1.5;
-    padding: 6px 0 6px 14px;
-    border-left: 2px solid var(--ai);
-    margin-bottom: 6px;
-    padding-left: 10px;
-    color: var(--ink);
-  }
+  .ad-field .len { color: var(--muted); font-size: 10px; margin-left: 6px; }
+  .hooks { margin: 0; padding: 0; list-style: none; }
+  .hooks li { font-size: 12px; line-height: 1.5; padding: 6px 0 6px 10px; border-left: 2px solid var(--ai); margin-bottom: 6px; color: var(--ink); }
+
+  /* Post action buttons */
+  .post-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .copy-btn {
     display: inline-block;
     font-size: 10px;
@@ -402,11 +432,27 @@ HTML_TEMPLATE = r"""<!doctype html>
     background: #fff;
     border-radius: 999px;
     cursor: pointer;
-    margin-top: 8px;
     font-family: inherit;
   }
   .copy-btn:hover { background: var(--ai); color: #fff; }
   .copy-btn.copied { background: var(--avail); color: #fff; border-color: var(--avail); }
+  .buf-schedule-btn {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 5px 10px;
+    border: 1px solid var(--ai);
+    color: var(--ai);
+    background: var(--ai-bg);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .buf-schedule-btn:hover { background: var(--ai); color: #fff; }
+  .buf-schedule-btn.scheduled { background: var(--avail-bg); color: var(--avail); border-color: var(--avail); cursor: default; }
+  .buf-schedule-btn:disabled { opacity: 0.6; cursor: wait; }
 
   .card a.more {
     margin-top: auto;
@@ -418,12 +464,30 @@ HTML_TEMPLATE = r"""<!doctype html>
     padding-top: 6px;
   }
   .card a.more:hover { text-decoration: underline; }
-  .empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
+  .empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--muted); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 320px;
   }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { background: #8a1f1f; }
+
   footer {
     text-align: center;
     color: var(--muted);
@@ -458,6 +522,10 @@ HTML_TEMPLATE = r"""<!doctype html>
   </div>
 </div>
 
+<div class="buffer-bar-wrap">
+  <div class="wrap" id="buffer-bar"></div>
+</div>
+
 <main class="wrap">
   <div class="grid" id="grid"></div>
 </main>
@@ -466,6 +534,8 @@ HTML_TEMPLATE = r"""<!doctype html>
   Listings sourced from <a href="https://goodmanproperties.org/our-properties/" target="_blank" rel="noopener">goodmanproperties.org</a>.
   AI enrichment (headlines, descriptions, tenant recommendations, marketing copy) generated by Claude Sonnet 4.6 — verify before use.
 </footer>
+
+<div id="toast" class="toast"></div>
 
 <script>
 const BASE = "https://goodmanproperties.org";
@@ -524,17 +594,191 @@ function searchBlob(l) {
   return parts.join(" ").toLowerCase();
 }
 
-window.copyText = function(btn, text) {
+// ─── Toast ────────────────────────────────────────────────────────────────────
+
+const toastEl = document.getElementById("toast");
+let toastTimer;
+function showToast(msg, type = "success") {
+  toastEl.textContent = msg;
+  toastEl.className = "toast " + type + " show";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3500);
+}
+
+// ─── Buffer integration ────────────────────────────────────────────────────────
+
+const BUFFER_API = "https://api.bufferapp.com/1";
+
+// Persisted in localStorage so the token survives page reloads.
+const buf = {
+  get token()    { return localStorage.getItem("buf_token") || ""; },
+  set token(v)   { v ? localStorage.setItem("buf_token", v) : localStorage.removeItem("buf_token"); },
+  get profiles() { return JSON.parse(localStorage.getItem("buf_profiles") || "[]"); },
+  set profiles(v){ localStorage.setItem("buf_profiles", JSON.stringify(v)); },
+  get mapping()  { return JSON.parse(localStorage.getItem("buf_mapping") || "{}"); },
+  set mapping(v) { localStorage.setItem("buf_mapping", JSON.stringify(v)); },
+};
+
+// Which of our channel keys can be sent to Buffer, and the service hint for
+// auto-selecting the right profile in the mapping UI.
+const BUFFER_CHANNELS = [
+  { key: "fb",  label: "Facebook post",    service: "facebook"  },
+  { key: "ig",  label: "Instagram caption",service: "instagram" },
+  { key: "li",  label: "LinkedIn post",    service: "linkedin"  },
+  { key: "fad", label: "FB Ad copy",       service: "facebook"  },
+];
+
+async function bufferFetch(path, method = "GET", body = null) {
+  const opts = {
+    method,
+    headers: { "Authorization": "Bearer " + buf.token },
+  };
+  if (body) {
+    opts.headers["Content-Type"] = "application/x-www-form-urlencoded";
+    opts.body = new URLSearchParams(body).toString();
+  }
+  const res = await fetch(BUFFER_API + path, opts);
+  if (!res.ok) {
+    const msg = await res.text().catch(() => res.statusText);
+    throw new Error("Buffer " + res.status + ": " + msg);
+  }
+  return res.json();
+}
+
+window.bufferConnect = async function() {
+  const input = document.getElementById("buf-token-input");
+  const token = input.value.trim();
+  if (!token) return;
+  const btn = document.getElementById("buf-connect-btn");
+  btn.disabled = true;
+  btn.textContent = "Connecting…";
+  try {
+    buf.token = token;
+    const profiles = await bufferFetch("/profiles.json");
+    buf.profiles = profiles;
+    // Auto-map profiles by service name
+    const mapping = {};
+    for (const ch of BUFFER_CHANNELS) {
+      const match = profiles.find(p => p.service === ch.service);
+      if (match) mapping[ch.key] = match.id;
+    }
+    buf.mapping = mapping;
+    input.value = "";
+    renderBufferBar();
+    render();
+    showToast("Buffer connected — " + profiles.length + " profile" + (profiles.length !== 1 ? "s" : "") + " found.");
+  } catch(e) {
+    buf.token = "";
+    btn.disabled = false;
+    btn.textContent = "Connect";
+    showToast("Could not connect — check your access token.", "error");
+  }
+};
+
+window.bufferDisconnect = function() {
+  buf.token = "";
+  localStorage.removeItem("buf_profiles");
+  localStorage.removeItem("buf_mapping");
+  renderBufferBar();
+  render();
+  showToast("Buffer disconnected.", "success");
+};
+
+window.bufferToggleMapping = function() {
+  const el = document.getElementById("buf-mapping-panel");
+  if (el) el.style.display = el.style.display === "none" ? "block" : "none";
+};
+
+window.bufferSaveMapping = function(channelKey, profileId) {
+  const m = buf.mapping;
+  m[channelKey] = profileId;
+  buf.mapping = m;
+};
+
+window.scheduleInBuffer = async function(btn, channelKey) {
+  const panel = btn.closest(".channel-panel");
+  const text = panel.querySelector(".post-body").textContent;
+  const profileId = buf.mapping[channelKey];
+  if (!profileId) {
+    showToast("Map this channel to a Buffer profile — click 'Channels' above.", "error");
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = "Scheduling…";
+  try {
+    await bufferFetch("/updates/create.json", "POST", {
+      text,
+      "profile_ids[]": profileId,
+    });
+    btn.textContent = "Queued ✓";
+    btn.classList.add("scheduled");
+    showToast("Added to Buffer queue!");
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = "Add to Buffer";
+    showToast("Failed: " + e.message, "error");
+  }
+};
+
+function renderBufferBar() {
+  const bar = document.getElementById("buffer-bar");
+  const profiles = buf.profiles;
+  const mapping = buf.mapping;
+
+  if (!buf.token || profiles.length === 0) {
+    bar.innerHTML = `
+      <div class="buf-connect">
+        <span class="buf-logo">Buffer</span>
+        <input id="buf-token-input" type="password" placeholder="Paste your Buffer access token to enable one-click scheduling…" autocomplete="off">
+        <button id="buf-connect-btn" class="buf-action-btn" onclick="bufferConnect()">Connect</button>
+        <a class="buf-help" href="https://buffer.com/developers/apps" target="_blank" rel="noopener">Get token →</a>
+      </div>`;
+    return;
+  }
+
+  const mappedCount = BUFFER_CHANNELS.filter(ch => mapping[ch.key]).length;
+
+  const selects = BUFFER_CHANNELS.map(ch => {
+    const opts = profiles.map(p => {
+      const label = (p.service_username || p.service_id || p.service) + " (" + p.service + ")";
+      const sel = mapping[ch.key] === p.id ? " selected" : "";
+      return `<option value="${esc(p.id)}"${sel}>${esc(label)}</option>`;
+    }).join("");
+    return `
+      <div class="buf-map-row">
+        <span class="buf-map-label">${ch.label}</span>
+        <select class="buf-map-sel" onchange="bufferSaveMapping('${ch.key}', this.value)">
+          <option value="">— not mapped —</option>
+          ${opts}
+        </select>
+      </div>`;
+  }).join("");
+
+  bar.innerHTML = `
+    <div class="buf-status-row">
+      <span class="buf-dot"></span>
+      <span class="buf-status-label">Buffer connected · ${profiles.length} profile${profiles.length !== 1 ? "s" : ""} · ${mappedCount} channel${mappedCount !== 1 ? "s" : ""} mapped</span>
+      <button class="buf-ghost-btn" onclick="bufferToggleMapping()">▾ Channels</button>
+      <button class="buf-disconnect-btn" onclick="bufferDisconnect()">Disconnect</button>
+    </div>
+    <div id="buf-mapping-panel" class="buf-mapping" style="display:none">
+      ${selects}
+    </div>`;
+}
+
+// ─── Copy to clipboard ────────────────────────────────────────────────────────
+
+window.copyText = function(btn) {
+  const text = btn.closest(".channel-panel").querySelector(".post-body").textContent;
   navigator.clipboard.writeText(text).then(() => {
-    const original = btn.textContent;
+    const orig = btn.textContent;
     btn.textContent = "Copied";
     btn.classList.add("copied");
-    setTimeout(() => {
-      btn.textContent = original;
-      btn.classList.remove("copied");
-    }, 1500);
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove("copied"); }, 1500);
   });
 };
+
+// ─── Channel tab switching ────────────────────────────────────────────────────
 
 window.showChannel = function(btn, panelId) {
   const container = btn.closest("details.marketing");
@@ -547,83 +791,76 @@ window.showChannel = function(btn, panelId) {
 let cardCounter = 0;
 function cardId() { return "card-" + (cardCounter++); }
 
+// ─── Marketing content rendering ──────────────────────────────────────────────
+
 function renderMarketing(m, uid) {
   if (!m) return "";
+  const safe = s => esc(s || "");
 
-  const safe = (s) => esc(s || "");
+  const tabs = [], panels = [];
+  const mapping = buf.mapping;
 
-  const panels = [];
-  const tabs = [];
-
-  function addTab(key, label, panelHtml) {
-    const pid = `${uid}-${key}`;
-    tabs.push(`<button class="channel-tab${tabs.length === 0 ? ' active' : ''}" onclick="showChannel(this, '${pid}')">${label}</button>`);
-    panels.push(`<div class="channel-panel${panels.length === 0 ? ' active' : ''}" id="${pid}">${panelHtml}</div>`);
+  function addTab(key, label, bodyHtml, bufKey) {
+    const pid = uid + "-" + key;
+    const isFirst = tabs.length === 0;
+    const bufBtn = (bufKey && mapping[bufKey])
+      ? `<button class="buf-schedule-btn" onclick="scheduleInBuffer(this, '${bufKey}')">Add to Buffer</button>`
+      : "";
+    tabs.push(`<button class="channel-tab${isFirst ? " active" : ""}" onclick="showChannel(this, '${pid}')">${label}</button>`);
+    panels.push(`
+      <div class="channel-panel${isFirst ? " active" : ""}" id="${pid}">
+        ${bodyHtml}
+        <div class="post-actions">
+          <button class="copy-btn" onclick="copyText(this)">Copy</button>
+          ${bufBtn}
+        </div>
+      </div>`);
   }
 
-  if (m.facebook_local_post) {
-    const text = m.facebook_local_post;
-    addTab("fb", "Facebook", `
-      <div class="post-body">${safe(text)}</div>
-      <button class="copy-btn" onclick="copyText(this, this.previousElementSibling.textContent)">Copy post</button>
-    `);
+  function postPanel(text) {
+    return `<div class="post-body">${safe(text)}</div>`;
   }
-  if (m.nextdoor_post) {
-    const text = m.nextdoor_post;
-    addTab("nd", "Nextdoor", `
-      <div class="post-body">${safe(text)}</div>
-      <button class="copy-btn" onclick="copyText(this, this.previousElementSibling.textContent)">Copy post</button>
-    `);
-  }
-  if (m.instagram_caption) {
-    const text = m.instagram_caption;
-    addTab("ig", "Instagram", `
-      <div class="post-body">${safe(text)}</div>
-      <button class="copy-btn" onclick="copyText(this, this.previousElementSibling.textContent)">Copy caption</button>
-    `);
-  }
-  if (m.linkedin_post) {
-    const text = m.linkedin_post;
-    addTab("li", "LinkedIn", `
-      <div class="post-body">${safe(text)}</div>
-      <button class="copy-btn" onclick="copyText(this, this.previousElementSibling.textContent)">Copy post</button>
-    `);
-  }
+
+  if (m.facebook_local_post) addTab("fb",  "Facebook",  postPanel(m.facebook_local_post),  "fb");
+  if (m.nextdoor_post)       addTab("nd",  "Nextdoor",  postPanel(m.nextdoor_post),         null);
+  if (m.instagram_caption)   addTab("ig",  "Instagram", postPanel(m.instagram_caption),     "ig");
+  if (m.linkedin_post)       addTab("li",  "LinkedIn",  postPanel(m.linkedin_post),         "li");
+
   if (m.google_search_ad && typeof m.google_search_ad === "object") {
     const a = m.google_search_ad;
-    const field = (label, value, limit) => `
+    const field = (lbl, val, lim) => `
       <div class="ad-field">
-        <span class="label">${label}<span class="len">${(value || "").length}/${limit}</span></span>
-        <span class="value">${safe(value)}</span>
+        <span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span>
+        <span class="value">${safe(val)}</span>
       </div>`;
-    addTab("gad", "Google Ad", `
-      ${field("Headline 1", a.headline_1, 30)}
-      ${field("Headline 2", a.headline_2, 30)}
-      ${field("Headline 3", a.headline_3, 30)}
-      ${field("Description 1", a.description_1, 90)}
-      ${field("Description 2", a.description_2, 90)}
-    `);
+    const body = field("Headline 1",    a.headline_1,    30)
+               + field("Headline 2",    a.headline_2,    30)
+               + field("Headline 3",    a.headline_3,    30)
+               + field("Description 1", a.description_1, 90)
+               + field("Description 2", a.description_2, 90);
+    // wrap in a post-body-like div so copyText finds it
+    addTab("gad", "Google Ad", `<div class="post-body">${body}</div>`, null);
   }
+
   if (m.facebook_ad && typeof m.facebook_ad === "object") {
     const a = m.facebook_ad;
-    const field = (label, value, limit) => `
+    const field = (lbl, val, lim) => `
       <div class="ad-field">
-        <span class="label">${label}<span class="len">${(value || "").length}/${limit}</span></span>
-        <span class="value">${safe(value)}</span>
+        <span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span>
+        <span class="value">${safe(val)}</span>
       </div>`;
-    addTab("fad", "FB Ad", `
-      ${field("Primary Text", a.primary_text, 125)}
-      ${field("Headline", a.headline, 27)}
-      ${field("Description", a.description, 27)}
-    `);
+    const body = field("Primary Text", a.primary_text, 125)
+               + field("Headline",     a.headline,     27)
+               + field("Description",  a.description,  27);
+    addTab("fad", "FB Ad", `<div class="post-body">${body}</div>`, "fad");
   }
+
   if (Array.isArray(m.community_hooks) && m.community_hooks.length) {
-    addTab("hk", "Hooks", `
-      <ul class="hooks">
-        ${m.community_hooks.map(h => `<li>${safe(h)}</li>`).join("")}
-      </ul>
-    `);
+    const body = `<ul class="hooks">${m.community_hooks.map(h => `<li>${safe(h)}</li>`).join("")}</ul>`;
+    addTab("hk", "Hooks", `<div class="post-body">${body}</div>`, null);
   }
+
+  if (!tabs.length) return "";
 
   const context = m.local_context
     ? `<div class="local-context">${safe(m.local_context)}</div>`
@@ -635,9 +872,10 @@ function renderMarketing(m, uid) {
       ${context}
       <div class="channel-tabs">${tabs.join("")}</div>
       ${panels.join("")}
-    </details>
-  `;
+    </details>`;
 }
+
+// ─── Listing card rendering ───────────────────────────────────────────────────
 
 function render() {
   const query = q.value.trim().toLowerCase();
@@ -666,12 +904,8 @@ function render() {
     const uid = cardId();
     const headline = (e && e.headline) ? e.headline : l.a;
     const availChip = l.sf ? '<span class="chip avail">Available</span>' : '';
-    const description = (e && e.description)
-      ? `<div class="description">${esc(e.description)}</div>`
-      : '';
-    const angle = (e && e.leasing_angle)
-      ? `<div class="angle">${esc(e.leasing_angle)}</div>`
-      : '';
+    const description = (e && e.description) ? `<div class="description">${esc(e.description)}</div>` : '';
+    const angle = (e && e.leasing_angle) ? `<div class="angle">${esc(e.leasing_angle)}</div>` : '';
     const tenants = (e && Array.isArray(e.ideal_tenants) && e.ideal_tenants.length)
       ? `<details class="tenants">
           <summary>Ideal Tenants (${e.ideal_tenants.length})</summary>
@@ -681,13 +915,11 @@ function render() {
                 <div class="tenant-cat">${esc(t.category)}</div>
                 <div class="tenant-brands">${esc((t.example_brands || []).join(" · "))}</div>
                 <div class="tenant-why">${esc(t.why)}</div>
-              </li>
-            `).join("")}
+              </li>`).join("")}
           </ul>
         </details>`
       : '';
     const marketing = renderMarketing(l.m, uid);
-
     return `
       <article class="card">
         <div class="headline">${esc(headline)}</div>
@@ -698,13 +930,9 @@ function render() {
           ${availChip}
         </div>
         ${l.sf ? `<div class="sf">Available: <strong>${esc(l.sf)} SF</strong></div>` : ''}
-        ${description}
-        ${angle}
-        ${tenants}
-        ${marketing}
+        ${description}${angle}${tenants}${marketing}
         <a class="more" href="${BASE}${esc(l.u)}" target="_blank" rel="noopener">View source details →</a>
-      </article>
-    `;
+      </article>`;
   }).join("");
 }
 
@@ -713,6 +941,7 @@ stateSel.addEventListener("change", render);
 typeSel.addEventListener("change", render);
 availSel.addEventListener("change", render);
 
+renderBufferBar();
 render();
 </script>
 </body>
