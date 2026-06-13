@@ -418,6 +418,33 @@ HTML_TEMPLATE = r"""<!doctype html>
   }
   .pipe-approve-btn:hover { background: #0d3f6a; }
 
+  .leverage-callout {
+    background: #f3f0ff;
+    border: 1px solid #c4b8f7;
+    border-left: 4px solid #5a3fd6;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: #2d1b7a;
+    line-height: 1.5;
+  }
+  .leverage-callout strong { font-weight: 700; }
+
+  .pipe-leverage-hint {
+    font-size: 11px;
+    color: #5a3fd6;
+    font-weight: 600;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .wf-num-leverage {
+    background: #5a3fd6;
+  }
+
   /* ── Approval modal ── */
   .modal-overlay {
     display: none;
@@ -627,10 +654,22 @@ HTML_TEMPLATE = r"""<!doctype html>
       <div class="wf-step">
         <div class="wf-num">3</div>
         <div class="wf-text">
-          <strong>Approve &amp; Schedule</strong>
-          <span>One click publishes across all channels on your schedule</span>
+          <strong>Approve &amp; Publish</strong>
+          <span>One click goes live across all channels &amp; listing sites</span>
         </div>
       </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step">
+        <div class="wf-num wf-num-leverage">4</div>
+        <div class="wf-text">
+          <strong>Negotiate from Strength</strong>
+          <span>Candidates in pipeline = leverage at renewal talks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="leverage-callout">
+      <strong>The hidden advantage:</strong> Replacement candidates entering your pipeline 90 days out give ownership real leverage when an existing tenant wants to renegotiate — without ever creating a vacancy.
     </div>
 
     <!-- Stats -->
@@ -677,8 +716,8 @@ HTML_TEMPLATE = r"""<!doctype html>
       <div id="modal-content"></div>
     </div>
     <div class="modal-footer">
-      <div class="modal-footer-note">Approving will schedule posts across Facebook, Instagram, and LinkedIn.</div>
-      <button class="modal-approve-btn" id="modal-approve-btn">Approve &amp; Schedule All Posts</button>
+      <div class="modal-footer-note">Approving publishes across all channels and listing sites — attracting replacement candidates and giving you negotiating leverage with the current tenant.</div>
+      <button class="modal-approve-btn" id="modal-approve-btn">Approve &amp; Launch Candidate Pipeline</button>
     </div>
   </div>
 </div>
@@ -959,6 +998,7 @@ function renderPipeline() {
         <div class="pipe-headline">${esc(headline)}</div>
         <div class="pipe-addr">${esc(p.a)} · ${esc(p.c)}, ${esc(p.s)}</div>
         <div class="pipe-meta">Current tenant: <strong>${esc(p.tenant)}</strong> · Lease ends ${leaseDate}${sf ? " · " + esc(sf) : ""}</div>
+        <div class="pipe-leverage-hint">⚡ Approve to start candidate pipeline &amp; gain renewal leverage</div>
       </div>
       <div class="pipe-action">
         <div class="pipe-status-badge content-ready">Content Ready</div>
@@ -1013,7 +1053,7 @@ document.getElementById("modal-approve-btn").addEventListener("click", function(
     pipeState.approve(_modalKey);
     closeModal();
     renderPipeline();
-    showToast("✓ All posts approved and scheduled across Facebook, Instagram & LinkedIn", "success");
+    showToast("✓ Live across all channels — candidate pipeline is now building", "success");
   }, 1400);
 });
 
