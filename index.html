@@ -666,8 +666,8 @@ function cardId() { return "c" + (cardCounter++); }
 
 // ── Marketing content renderer ────────────────────────────────────────────────
 
-function renderMarketing(m, uid, wrapClass) {
-  if (!m) return "";
+function renderMarketing(m, uid, wrapClass, enrichment, sfVal) {
+  if (!m && !enrichment) return "";
   const safe = s => esc(s||"");
   const wrap = wrapClass || "marketing";
   const tabs = [], panels = [];
@@ -681,32 +681,68 @@ function renderMarketing(m, uid, wrapClass) {
 
   const post = text => `<div class="post-body">${safe(text)}</div>`;
 
-  if (m.facebook_local_post) addTab("fb",  "Facebook",  post(m.facebook_local_post));
-  if (m.nextdoor_post)       addTab("nd",  "Nextdoor",  post(m.nextdoor_post));
-  if (m.instagram_caption)   addTab("ig",  "Instagram", post(m.instagram_caption));
-  if (m.linkedin_post)       addTab("li",  "LinkedIn",  post(m.linkedin_post));
+  if (m) {
+    if (m.facebook_local_post) addTab("fb",  "Facebook",  post(m.facebook_local_post));
+    if (m.nextdoor_post)       addTab("nd",  "Nextdoor",  post(m.nextdoor_post));
+    if (m.instagram_caption)   addTab("ig",  "Instagram", post(m.instagram_caption));
+    if (m.linkedin_post)       addTab("li",  "LinkedIn",  post(m.linkedin_post));
 
-  if (m.google_search_ad && typeof m.google_search_ad === "object") {
-    const a = m.google_search_ad;
-    const f = (lbl,val,lim) => `<div class="ad-field"><span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span><span class="value">${safe(val)}</span></div>`;
-    addTab("gad","Google Ad",`<div class="post-body">${f("Headline 1",a.headline_1,30)}${f("Headline 2",a.headline_2,30)}${f("Headline 3",a.headline_3,30)}${f("Description 1",a.description_1,90)}${f("Description 2",a.description_2,90)}</div>`);
+    if (m.google_search_ad && typeof m.google_search_ad === "object") {
+      const a = m.google_search_ad;
+      const f = (lbl,val,lim) => `<div class="ad-field"><span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span><span class="value">${safe(val)}</span></div>`;
+      addTab("gad","Google Ad",`<div class="post-body">${f("Headline 1",a.headline_1,30)}${f("Headline 2",a.headline_2,30)}${f("Headline 3",a.headline_3,30)}${f("Description 1",a.description_1,90)}${f("Description 2",a.description_2,90)}</div>`);
+    }
+    if (m.facebook_ad && typeof m.facebook_ad === "object") {
+      const a = m.facebook_ad;
+      const f = (lbl,val,lim) => `<div class="ad-field"><span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span><span class="value">${safe(val)}</span></div>`;
+      addTab("fad","FB Ad",`<div class="post-body">${f("Primary Text",a.primary_text,125)}${f("Headline",a.headline,27)}${f("Description",a.description,27)}</div>`);
+    }
+    if (Array.isArray(m.community_hooks) && m.community_hooks.length) {
+      addTab("hk","Hooks",`<div class="post-body"><ul class="hooks">${m.community_hooks.map(h=>`<li>${safe(h)}</li>`).join("")}</ul></div>`);
+    }
   }
-  if (m.facebook_ad && typeof m.facebook_ad === "object") {
-    const a = m.facebook_ad;
-    const f = (lbl,val,lim) => `<div class="ad-field"><span class="label">${lbl}<span class="len">${(val||"").length}/${lim}</span></span><span class="value">${safe(val)}</span></div>`;
-    addTab("fad","FB Ad",`<div class="post-body">${f("Primary Text",a.primary_text,125)}${f("Headline",a.headline,27)}${f("Description",a.description,27)}</div>`);
-  }
-  if (Array.isArray(m.community_hooks) && m.community_hooks.length) {
-    addTab("hk","Hooks",`<div class="post-body"><ul class="hooks">${m.community_hooks.map(h=>`<li>${safe(h)}</li>`).join("")}</ul></div>`);
+
+  if (enrichment) {
+    const e = enrichment;
+    const sfStr = sfVal ? sfVal + " SF available" : "Space available";
+    const tenantLines = (e.ideal_tenants || []).slice(0, 4).map(t => {
+      const brands = (t.example_brands || []).slice(0, 2).join(", ");
+      return "• " + t.category + (brands ? " — " + brands : "");
+    }).join("\\n");
+
+    const creBody = [
+      e.headline || "",
+      "",
+      e.description || "",
+      "",
+      sfStr,
+      e.leasing_angle ? "Leasing angle: " + e.leasing_angle : "",
+      tenantLines ? "\\nIdeal tenant profile:\\n" + tenantLines : "",
+    ].filter(s => s !== "").join("\\n");
+
+    const consumerBody = [
+      e.headline || "",
+      "",
+      e.description || "",
+      "",
+      sfStr + ".",
+      e.leasing_angle || "",
+    ].filter(s => s !== "").join("\\n");
+
+    addTab("costar",  "CoStar/LoopNet", post(creBody));
+    addTab("crexi",   "Crexi",          post(creBody));
+    addTab("zillow",  "Zillow",         post(consumerBody));
+    addTab("redfin",  "Redfin",         post(consumerBody));
+    addTab("realtor", "Realtor.com",    post(consumerBody));
   }
 
   if (!tabs.length) return "";
-  const ctx = m.local_context ? `<div class="local-context">${safe(m.local_context)}</div>` : "";
+  const ctx = m && m.local_context ? `<div class="local-context">${safe(m.local_context)}</div>` : "";
 
   if (wrap === "modal") {
     return `<div class="modal-marketing">${ctx}<div class="channel-tabs">${tabs.join("")}</div>${panels.join("")}</div>`;
   }
-  return `<details class="${wrap}"><summary>Local Marketing Content (${tabs.length})</summary>${ctx}<div class="channel-tabs">${tabs.join("")}</div>${panels.join("")}</details>`;
+  return `<details class="${wrap}"><summary>Marketing &amp; Listing Content (${tabs.length})</summary>${ctx}<div class="channel-tabs">${tabs.join("")}</div>${panels.join("")}</details>`;
 }
 
 // ── Listings view ─────────────────────────────────────────────────────────────
@@ -756,7 +792,7 @@ function render() {
       <div class="addr-row"><span class="addr">${esc(l.a)}</span> · ${esc(l.c)}, ${esc(l.s)} ${esc(l.z)}</div>
       <div class="chips"><span class="chip state">${esc(l.s)}</span><span class="chip">${esc(l.t)}</span>${availChip}</div>
       ${l.sf ? `<div class="sf">Available: <strong>${esc(l.sf)} SF</strong></div>` : ''}
-      ${description}${angle}${tenants}${renderMarketing(l.m, uid)}
+      ${description}${angle}${tenants}${renderMarketing(l.m, uid, "", l.e, l.sf)}
       <a class="more" href="${BASE}${esc(l.u)}" target="_blank" rel="noopener">View source details →</a>
     </article>`;
   }).join("");
@@ -879,7 +915,7 @@ window.openModal = function(key) {
     `${p.a} · ${p.c}, ${p.s}  ·  Current tenant: ${p.tenant}  ·  Lease ends ${leaseDate} (${p.days} days)`;
 
   cardCounter = 1000;
-  document.getElementById("modal-content").innerHTML = renderMarketing(listing.m, cardId(), "modal");
+  document.getElementById("modal-content").innerHTML = renderMarketing(listing.m, cardId(), "modal", listing.e, p.sf);
 
   const btn = document.getElementById("modal-approve-btn");
   btn.textContent = "Approve & Schedule All Posts";
